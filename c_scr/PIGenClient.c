@@ -2,15 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/socket.h>
-#include <sys/un.h>
 #include <unistd.h>
 #include <errno.h>
 #include <sys/types.h>
-
-#include <netinet/in.h>
-#include <sys/un.h>
 #include <arpa/inet.h>
-
 
 int main ()
 {
@@ -34,10 +29,6 @@ int main ()
     struct sockaddr* addr = (struct sockaddr*)&remote_addr;
     socklen_t addrlen = sizeof(struct sockaddr_in);
 
-    // struct sockaddr_un me;
-    // me.sun_family = AF_UNIX;
-    // bind(server_socket, (void*)&me, sizeof(short));
-
     int conn_status = connect(server_socket, addr, addrlen);     
     perror("Connection");
     if(conn_status){
@@ -51,6 +42,7 @@ int main ()
     long long var8B = 13;
 
     char dataLen = 0;
+    char result;
 
     printf("Sending %d as 1B of data...\n", var1B);
     dataLen = 1;
@@ -61,6 +53,9 @@ int main ()
         perror("send 1B");
     }
 
+    recv(server_socket, &result, 1, 0);
+    printf("Received answer: %d\n", result);
+
     printf("Sending %d as 2B of data...\n", var2B);
     dataLen = 2;
     if(send(server_socket, &dataLen, sizeof(dataLen), 0) == -1){
@@ -69,6 +64,9 @@ int main ()
     if(send(server_socket, &var2B, sizeof(var2B), 0) == -1){
         perror("send 2B");
     }
+
+    recv(server_socket, &result, 1, 0);
+    printf("Received answer: %d\n", result);
 
     printf("Sending %d as 4B of data...\n", var4B);
     dataLen = 4;
@@ -79,6 +77,9 @@ int main ()
         perror("send 4B");
     }
 
+    recv(server_socket, &result, 1, 0);
+    printf("Received answer: %d\n", result);
+
     printf("Sending %lld as 8B of data...\n", var8B);
     dataLen = 8;
     if(send(server_socket, &dataLen, sizeof(dataLen), 0) == -1){
@@ -87,6 +88,9 @@ int main ()
     if(send(server_socket, &var8B, sizeof(var8B), 0) == -1){
         perror("send 8B");
     }
+
+    recv(server_socket, &result, 1, 0);
+    printf("Received answer: %d\n", result);
 
     fflush(stdout);
 

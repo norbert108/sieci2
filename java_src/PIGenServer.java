@@ -18,7 +18,9 @@ public class PIGenServer {
             outputStream = new DataOutputStream(clientSocket.getOutputStream());
 
             // start receiving messages from client
-            int n = 0, msgSize;
+            int msgSize;
+            long n;
+
             while (true){
                 if(inputStream.available() > 0){
                     msgSize = inputStream.readByte();
@@ -26,7 +28,15 @@ public class PIGenServer {
                     byte[] byteArray = new byte[msgSize];
                     inputStream.read(byteArray); //error check
 
-                    System.out.println(byteArrayToInt(byteArray));
+                    n = byteArrayToInt(byteArray);
+
+                    System.out.println("Received request for " + n + " digit.");
+
+                    // calculate...
+
+                    // send back result
+                    byte result = calculateNthPIDigit(n);
+                    outputStream.write(result);
                 }
             }
         }
@@ -43,5 +53,9 @@ public class PIGenServer {
         }
 
         return value;
+    }
+
+    private byte calculateNthPIDigit(long n){
+       return 7;
     }
 }
