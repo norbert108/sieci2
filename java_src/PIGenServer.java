@@ -32,8 +32,6 @@ public class PIGenServer {
 
                     System.out.println("Received request for " + n + " digit.");
 
-                    // calculate...
-
                     // send back result
                     byte result = calculateNthPIDigit(n);
                     outputStream.write(result);
