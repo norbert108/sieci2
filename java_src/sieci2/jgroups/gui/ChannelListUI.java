@@ -1,13 +1,19 @@
 package sieci2.jgroups.gui;
 
+import com.sun.org.apache.xalan.internal.xsltc.compiler.util.StringStack;
 import sieci2.jgroups.logic.ChatClient;
+import sieci2.jgroups.logic.ChatOperationProtos;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.*;
+import java.util.List;
 
 public class ChannelListUI extends JFrame{
 
@@ -33,6 +39,12 @@ public class ChannelListUI extends JFrame{
         channelListTableModel.setColumnIdentifiers(new String[]{"Channel"});
         channelListTable.setModel(channelListTableModel);
         channelListTable.setPreferredSize(new Dimension(150, 300));
+        channelListTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                loadChannelMembersList((String)channelListTableModel.getValueAt(channelListTable.getSelectedRow(), 0));
+            }
+        });
         channelListPanel.add(channelListTable);
         channelListPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
@@ -65,8 +77,26 @@ public class ChannelListUI extends JFrame{
         this.add(channelListPanel);
         this.add(rightPanel);
 
+        loadChannelList();
+
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         this.setVisible(true);
         this.pack();
+    }
+
+    private void loadChannelList(){
+        this.channelListTableModel.setRowCount(0);
+        for(String channelName:  chatClient.getState().keySet()){
+            this.channelListTableModel.addRow(new String[] {channelName});
+        }
+        this.channelListTableModel.fireTableDataChanged();
+    }
+
+    private void loadChannelMembersList(String channel){
+        this.memberListTableModel.setRowCount(0);
+        for(ChatOperationProtos.ChatAction chatAction: chatClient.getState().get(channel)){
+            this.memberListTableModel.addRow(new String[] {chatAction.getNickname()});
+        }
+        this.memberListTableModel.fireTableDataChanged();
     }
 }

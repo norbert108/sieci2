@@ -7,18 +7,18 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class NameInputUI extends JFrame{
+public class NameInputUI extends JFrame {
 
     private JButton okButton = new JButton("OK");
-    private JTextField nicknameField = new JTextField("nickname");
+    private JTextField nameField = new JTextField();
 
-    private void init(){
+    private void init() {
         this.setLayout(new BorderLayout());
 
-        nicknameField.setPreferredSize(new Dimension(150, 20));
+        nameField.setPreferredSize(new Dimension(150, 20));
 
         JPanel panel = new JPanel(new FlowLayout());
-        panel.add(nicknameField);
+        panel.add(nameField);
         panel.add(okButton);
         this.add(panel);
 
@@ -29,26 +29,38 @@ public class NameInputUI extends JFrame{
         this.pack();
     }
 
-    public NameInputUI(){
+    public NameInputUI() {
         init();
 
         okButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new ChatClientUI(new ChatClient(nicknameField.getText()));
-                dispose();
+                String nickname = nameField.getText();
+
+                if (!nickname.equals("")) {
+                    new ChatClientUI(new ChatClient(nameField.getText()));
+                    dispose();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Nickname cannot be empty!", "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
     }
 
-    public NameInputUI(ChatClient chatClient){
+    public NameInputUI(ChatClient chatClient) {
         init();
 
         okButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                chatClient.createChannel(nicknameField.getText());
-                dispose();
+                String channelName = nameField.getText();
+
+                try {
+                    chatClient.joinChannel(channelName);
+                    dispose();
+                } catch (Exception ex){
+                    JOptionPane.showMessageDialog(null, "Channel name must be valid ipv4 multicast address!", "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
     }
