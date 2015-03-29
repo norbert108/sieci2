@@ -24,6 +24,7 @@ public class ManagmentChannelReceiver extends ReceiverAdapter {
 
     @Override
     public void viewAccepted(View view) {
+        //TODO: remove disconnected clients
         // tylko jak spierdala z chata
 //        super.viewAccepted(view);
         System.out.println("joined/left:");

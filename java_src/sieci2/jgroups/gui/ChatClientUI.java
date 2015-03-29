@@ -12,7 +12,8 @@ import java.awt.event.ActionListener;
 
 public class ChatClientUI extends JFrame {
 
-    private ChatClient chatClient = null;
+    private ChatClient chatClient;
+    private String channelName = "not implemented yet";
 
     private JTextPane chatWindow = new JTextPane();
 
@@ -23,6 +24,7 @@ public class ChatClientUI extends JFrame {
 
     public ChatClientUI(ChatClient chatClient){
         this.chatClient = chatClient;
+//        this.channelName = channelName;
 
         this.setLayout(new BorderLayout());
 
@@ -41,20 +43,31 @@ public class ChatClientUI extends JFrame {
             }
         });
 
+        sendButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                chatClient.sendMessage(channelName, inputField.getText());
+            }
+        });
+
         bottomPanel.setLayout(new BorderLayout());
         bottomPanel.add(channelListButton, BorderLayout.LINE_START);
         bottomPanel.add(inputField, BorderLayout.CENTER);
         bottomPanel.add(sendButton, BorderLayout.LINE_END);
         this.add(bottomPanel, BorderLayout.PAGE_END);
 
-        displayChatMessage("Connected to network as " + this.chatClient.getNickname());
+        displayChatMessage("Connected to channel" + this.channelName + " as " + this.chatClient.getNickname());
 
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setVisible(true);
         this.pack();
     }
 
-    private void displayClientMessage(String nickname, String time, String message){
+    public void setChannelName(String channelName){
+        this.channelName = channelName;
+    }
+
+    public void displayClientMessage(String nickname, String time, String message){
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(time);
         stringBuilder.append(" ");
@@ -65,7 +78,7 @@ public class ChatClientUI extends JFrame {
         addLine(stringBuilder.toString());
     }
 
-    private void displayChatMessage(String message){
+    public void displayChatMessage(String message){
         String text = "* " + message + " *";
 
         this.addLine(text);

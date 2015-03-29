@@ -3,33 +3,35 @@ package sieci2.jgroups.logic;
 import org.jgroups.JChannel;
 import org.jgroups.Message;
 import org.jgroups.ReceiverAdapter;
-import org.jgroups.View;
 import org.jgroups.protocols.*;
 import org.jgroups.protocols.pbcast.*;
 import org.jgroups.stack.ProtocolStack;
+import sieci2.jgroups.gui.ChatClientUI;
 
 import java.net.InetAddress;
-import java.net.UnknownHostException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ChatClient {
     private String nickname;
+    private DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
     private final String CONTROL_CHANNEL_NAME = "ChatManagement768624";
 
     private JChannel controlChannel = new JChannel(false);
     private Map<String, List<ChatOperationProtos.ChatAction>> channelsInfo = new HashMap<>();
+    private Map<String, JChannel> openedChannels = new HashMap<>(); //map of channels current client is connected to
+    private Map<String, ChatClientUI> chatInstances = new HashMap<>();
 
     public ChatClient(String nickname) {
         this.nickname = nickname;
 
         try {
             controlChannel = openChannel(CONTROL_CHANNEL_NAME, null, new ManagmentChannelReceiver(this));
-
-            //synchronize state
-
             controlChannel.getState(null, 10000);
         } catch (Exception e) {
             e.printStackTrace();
@@ -84,12 +86,10 @@ public class ChatClient {
                 .addProtocol(new STATE_TRANSFER())
                 .addProtocol(new FLUSH());
 
-
         protocolStack.init();
 
         channel.setReceiver(receiver);
         channel.connect(channelName);
-
 
         System.out.println("Created channel " + channelName);
 
@@ -97,7 +97,14 @@ public class ChatClient {
     }
 
     public void joinChannel(String channelName) throws Exception {
-        openChannel(channelName, channelName, new ChatChannelReceiver());
+        JChannel channel = openChannel(channelName, channelName, new ChatChannelReceiver(this, channelName));
+        openedChannels.put(channelName, channel);
+
+        // TODO: refactor
+        ChatClientUI chatClientUI = new ChatClientUI(this);
+        chatClientUI.setChannelName(channelName);
+        chatInstances.put(channelName, chatClientUI);
+
         sendClientStatus(channelName, nickname, ChatOperationProtos.ChatAction.ActionType.JOIN);
     }
 
@@ -113,6 +120,29 @@ public class ChatClient {
             controlChannel.send(message);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    /** Receive message from channel */
+    public void receiveMessage(String channelName, String message){
+        ChatClientUI chatClientUI = this.chatInstances.get(channelName);
+
+        String time = this.dateFormat.format(new Date());
+        chatClientUI.displayClientMessage(this.nickname, time , message);
+    }
+
+    /** Send message to all channels clinet is connected to */
+    public void sendMessage(String channelName, String messageText){
+        JChannel channel = this.openedChannels.get(channelName);
+
+        if(channel != null){
+            ChatOperationProtos.ChatMessage chatMessage = ChatOperationProtos.ChatMessage.newBuilder().setMessage(messageText).build();
+            Message message = new Message(null, null, chatMessage.toByteArray());
+            try{
+                channel.send(message);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
 }

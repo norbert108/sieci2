@@ -1,6 +1,5 @@
 package sieci2.jgroups.gui;
 
-import com.sun.org.apache.xalan.internal.xsltc.compiler.util.StringStack;
 import sieci2.jgroups.logic.ChatClient;
 import sieci2.jgroups.logic.ChatOperationProtos;
 
@@ -12,8 +11,6 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.*;
-import java.util.List;
 
 public class ChannelListUI extends JFrame{
 
@@ -57,7 +54,14 @@ public class ChannelListUI extends JFrame{
         connectButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Connect");
+                String channelName = (String)channelListTableModel.getValueAt(channelListTable.getSelectedRow(), 0);
+                if(channelName != null && !channelName.equals("")){
+                    try{
+                        chatClient.joinChannel(channelName);
+                    } catch (Exception ex){
+                        ex.printStackTrace();
+                    }
+                }
             }
         });
         controlsPanel.add(connectButton);
