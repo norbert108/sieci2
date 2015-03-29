@@ -38,7 +38,7 @@ public class NameInputUI extends JFrame {
                 String nickname = nameField.getText();
 
                 if (!nickname.equals("")) {
-                    new ChatClientUI(new ChatClient(nameField.getText()));
+                    new ChannelListUI(new ChatClient(nickname));
                     dispose();
                 } else {
                     JOptionPane.showMessageDialog(null, "Nickname cannot be empty!", "Error", JOptionPane.ERROR_MESSAGE);

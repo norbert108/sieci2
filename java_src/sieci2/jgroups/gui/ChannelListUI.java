@@ -52,12 +52,14 @@ public class ChannelListUI extends JFrame{
         memberListPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
         connectButton.addActionListener(new ActionListener() {
+            //TODO: prevent multiple connections to one single channel
             @Override
             public void actionPerformed(ActionEvent e) {
                 String channelName = (String)channelListTableModel.getValueAt(channelListTable.getSelectedRow(), 0);
                 if(channelName != null && !channelName.equals("")){
                     try{
                         chatClient.joinChannel(channelName);
+                        dispose();
                     } catch (Exception ex){
                         ex.printStackTrace();
                     }
@@ -70,6 +72,7 @@ public class ChannelListUI extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 new NameInputUI(chatClient);
+                dispose();
             }
         });
         controlsPanel.add(newChannelButton);
