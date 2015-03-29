@@ -1,4 +1,6 @@
-package sieci2.jgroups;
+package sieci2.jgroups.gui;
+
+import sieci2.jgroups.logic.ChatClient;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -8,6 +10,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class ChannelListUI extends JFrame{
+
+    private ChatClient chatClient;
 
     private JPanel controlsPanel = new JPanel();
     private JButton connectButton = new JButton("Connect");
@@ -21,7 +25,9 @@ public class ChannelListUI extends JFrame{
     private JPanel memberListPanel = new JPanel(new BorderLayout());
     private DefaultTableModel memberListTableModel = new DefaultTableModel();
 
-    public ChannelListUI(){
+    public ChannelListUI(ChatClient chatClient){
+        this.chatClient = chatClient;
+
         this.setLayout(new GridLayout(1, 2));
 
         channelListTableModel.setColumnIdentifiers(new String[]{"Channel"});
@@ -47,7 +53,7 @@ public class ChannelListUI extends JFrame{
         newChannelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("New Channel");
+                new NameInputUI(chatClient);
             }
         });
         controlsPanel.add(newChannelButton);

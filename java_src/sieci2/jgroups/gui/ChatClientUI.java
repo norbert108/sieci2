@@ -1,4 +1,6 @@
-package sieci2.jgroups;
+package sieci2.jgroups.gui;
+
+import sieci2.jgroups.logic.ChatClient;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -35,7 +37,7 @@ public class ChatClientUI extends JFrame {
         channelListButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new ChannelListUI();
+                new ChannelListUI(chatClient);
             }
         });
 
@@ -44,7 +46,9 @@ public class ChatClientUI extends JFrame {
         bottomPanel.add(inputField, BorderLayout.CENTER);
         bottomPanel.add(sendButton, BorderLayout.LINE_END);
         this.add(bottomPanel, BorderLayout.PAGE_END);
-        
+
+        displayChatMessage("Connected to network as " + this.chatClient.getNickname());
+
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setVisible(true);
         this.pack();

@@ -1,4 +1,4 @@
-package sieci2.jgroups;
+package sieci2.jgroups.logic;
 
 import org.jgroups.JChannel;
 import org.jgroups.Message;
@@ -27,6 +27,10 @@ public class ChatClient {
 
     public ChatClient(String nickname){
         this.nickname = nickname;
+    }
+
+    public String getNickname(){
+        return nickname;
     }
 
     /** Initializes protocol stack and connects to management channel */
@@ -73,5 +77,9 @@ public class ChatClient {
 
     public void synchronize() {
 
+    }
+
+    public void createChannel(String channelName){
+        System.out.println("Created channel " + channelName);
     }
 }
