@@ -22,12 +22,26 @@ public class ManagmentChannelReceiver extends ReceiverAdapter {
     @Override
     public void viewAccepted(View view){
         //TODO: remove disconnected clients and empty channels
-        List<Address> membersList = view.getMembers();
-        for (Address member : membersList) {
-            System.out.println(member.toString());
+        List<Address> membersAddresses = view.getMembers();
+        List<String> members = new ArrayList<>();
+        for(Address memberAddress : membersAddresses) {
+            members.add(memberAddress.toString());
         }
 
-        System.out.println("Client joined/left!");
+        Map<String, List<ChatOperationProtos.ChatAction>> stateMap = chatClient.getState();
+        synchronized(stateMap) {
+            for(List<ChatOperationProtos.ChatAction> channelActions : stateMap.values()) {
+                List<ChatOperationProtos.ChatAction> toRemove = new ArrayList<>();
+
+                for(ChatOperationProtos.ChatAction action : channelActions) {
+                    if(!members.contains(action.getNickname())) {
+                        toRemove.add(action);
+                    }
+                }
+
+                channelActions.removeAll(toRemove);
+            }
+        }
     }
 
     @Override
