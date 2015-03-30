@@ -24,8 +24,7 @@ public class ChatChannelReceiver extends ReceiverAdapter {
         try {
             ChatOperationProtos.ChatMessage chatMessage = ChatOperationProtos.ChatMessage.parseFrom(message.getRawBuffer());
 
-            // TODO: sender nick support
-            chatClient.receiveMessage(channelName, chatMessage.getMessage());
+            chatClient.receiveMessage(channelName, message.getSrc().toString(), chatMessage.getMessage());
         } catch (Exception e){
             e.printStackTrace();
         }

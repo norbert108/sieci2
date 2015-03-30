@@ -1,8 +1,6 @@
 package zestaw2.logic;
 
-import org.jgroups.JChannel;
-import org.jgroups.Message;
-import org.jgroups.ReceiverAdapter;
+import org.jgroups.*;
 import org.jgroups.protocols.*;
 import org.jgroups.protocols.pbcast.*;
 import org.jgroups.stack.ProtocolStack;
@@ -11,10 +9,7 @@ import zestaw2.gui.ChatClientUI;
 import java.net.InetAddress;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ChatClient {
     private String nickname;
@@ -23,18 +18,35 @@ public class ChatClient {
     private final String CONTROL_CHANNEL_NAME = "ChatManagement768624";
 
     private JChannel controlChannel = new JChannel(false);
+
     private Map<String, List<ChatOperationProtos.ChatAction>> channelsInfo = new HashMap<>();
     private Map<String, JChannel> openedChannels = new HashMap<>(); //map of channels current client is connected to
     private Map<String, ChatClientUI> chatInstances = new HashMap<>();
 
-    public ChatClient(String nickname) {
+    public ChatClient(String nickname) throws Exception {
         this.nickname = nickname;
 
         try {
             controlChannel = openChannel(CONTROL_CHANNEL_NAME, null, new ManagmentChannelReceiver(this));
             controlChannel.getState(null, 10000);
+
+            // check if supplied nickname is unique in chat
+            View controlChannelView = controlChannel.getView();
+            List<Address> membersList = controlChannelView.getMembers();
+            List<String> memberStringList = new ArrayList<>();
+            for (Address member : membersList) {
+                if (!memberStringList.contains(member.toString())) {
+                    memberStringList.add(member.toString());
+                } else {
+                    controlChannel.disconnect();
+                    throw new Exception("Nickname in use");
+                }
+            }
         } catch (Exception e) {
-            e.printStackTrace();
+            if (e.getMessage().equals("Nickname in use")) throw e;
+            else {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -85,13 +97,11 @@ public class ChatClient {
                 .addProtocol(new FRAG2())
                 .addProtocol(new STATE_TRANSFER())
                 .addProtocol(new FLUSH());
-
         protocolStack.init();
 
         channel.setReceiver(receiver);
+        channel.setName(nickname);
         channel.connect(channelName);
-
-        System.out.println("Created channel " + channelName);
 
         return channel;
     }
@@ -123,24 +133,28 @@ public class ChatClient {
         }
     }
 
-    /** Receive message from channel */
-    public void receiveMessage(String channelName, String message){
+    /**
+     * Receive message from channel
+     */
+    public void receiveMessage(String channelName, String nickname, String message) {
         ChatClientUI chatClientUI = this.chatInstances.get(channelName);
 
         String time = this.dateFormat.format(new Date());
-        chatClientUI.displayClientMessage(this.nickname, time , message);
+        chatClientUI.displayClientMessage(nickname, time, message);
     }
 
-    /** Send message to all channels clinet is connected to */
-    public void sendMessage(String channelName, String messageText){
+    /**
+     * Send message to all channels clinet is connected to
+     */
+    public void sendMessage(String channelName, String messageText) {
         JChannel channel = this.openedChannels.get(channelName);
 
-        if(channel != null){
+        if (channel != null) {
             ChatOperationProtos.ChatMessage chatMessage = ChatOperationProtos.ChatMessage.newBuilder().setMessage(messageText).build();
             Message message = new Message(null, null, chatMessage.toByteArray());
-            try{
+            try {
                 channel.send(message);
-            } catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

@@ -9,10 +9,7 @@ import org.jgroups.View;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ManagmentChannelReceiver extends ReceiverAdapter {
 
@@ -23,21 +20,29 @@ public class ManagmentChannelReceiver extends ReceiverAdapter {
     }
 
     @Override
-    public void viewAccepted(View view) {
+    public void viewAccepted(View view){
         //TODO: remove disconnected clients
         // tylko jak spierdala z chata
-//        super.viewAccepted(view);
-        System.out.println("joined/left:");
-        List<Address> members = view.getMembers();
-        for (Address member : members) {
+     //   super.viewAccepted(view);
+
+        System.out.println("joined/left: " + view.getCreator().toString());
+
+        List<Address> membersList = view.getMembers();
+//        Set<Address> membersSet = new HashSet<>(membersList);
+//        if (membersSet.size() < membersList.size()) System.out.println("Nickname in use");
+//
+        for (Address member : membersList) {
             System.out.println(member.toString());
         }
+
+
+//        nicknameMap.put(view.getSrc(), chatAction.getNickname());
+
 //        System.out.println(view.toString());
     }
 
     @Override
     public void receive(Message message) {
-        System.out.println("received msg");
         try {
             ChatOperationProtos.ChatAction chatAction = ChatOperationProtos.ChatAction.parseFrom(message.getRawBuffer());
             String channelName = chatAction.getChannel();
