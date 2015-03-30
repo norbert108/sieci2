@@ -31,6 +31,7 @@ public class NameInputUI extends JFrame {
 
     public NameInputUI() {
         init();
+        nameField.setText("nickname");
 
         okButton.addActionListener(new ActionListener() {
             @Override
@@ -49,6 +50,7 @@ public class NameInputUI extends JFrame {
 
     public NameInputUI(ChatClient chatClient) {
         init();
+        nameField.setText("230.0.0.36");
 
         okButton.addActionListener(new ActionListener() {
             @Override
@@ -59,6 +61,7 @@ public class NameInputUI extends JFrame {
                     chatClient.joinChannel(channelName);
                     dispose();
                 } catch (Exception ex){
+                    ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Channel name must be valid ipv4 multicast address!", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
