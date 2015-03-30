@@ -11,7 +11,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.*;
 
-//TODO: remove empty channels from list
 public class ManagmentChannelReceiver extends ReceiverAdapter {
 
     ChatClient chatClient = null;
@@ -22,25 +21,13 @@ public class ManagmentChannelReceiver extends ReceiverAdapter {
 
     @Override
     public void viewAccepted(View view){
-        //TODO: remove disconnected clients
-        // tylko jak spierdala z chata
-     //   super.viewAccepted(view);
-
-        System.out.println("joined/left: " + view.getCreator().toString());
-
+        //TODO: remove disconnected clients and empty channels
         List<Address> membersList = view.getMembers();
-//        Set<Address> membersSet = new HashSet<>(membersList);
-//        if (membersSet.size() < membersList.size()) System.out.println("Nickname in use");
-//
         for (Address member : membersList) {
             System.out.println(member.toString());
         }
 
-
-
-//        nicknameMap.put(view.getSrc(), chatAction.getNickname());
-
-//        System.out.println(view.toString());
+        System.out.println("Client joined/left!");
     }
 
     @Override

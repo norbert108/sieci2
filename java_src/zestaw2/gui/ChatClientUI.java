@@ -59,11 +59,12 @@ public class ChatClientUI extends JFrame {
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                System.out.println("Disconnected from channel " + channelName);
                 chatClient.leaveChannel(channelName);
             }
         });
 
-        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         this.setVisible(true);
         this.pack();
     }

@@ -52,7 +52,6 @@ public class ChannelListUI extends JFrame{
         memberListPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
         connectButton.addActionListener(new ActionListener() {
-            //TODO: prevent multiple connections to one single channel
             @Override
             public void actionPerformed(ActionEvent e) {
                 String channelName = (String)channelListTableModel.getValueAt(channelListTable.getSelectedRow(), 0);

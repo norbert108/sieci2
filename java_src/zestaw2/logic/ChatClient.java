@@ -119,9 +119,15 @@ public class ChatClient {
     public void leaveChannel(String channelName){
         Channel channel = openedChannels.get(channelName);
         openedChannels.remove(channelName);
+        chatInstances.remove(channelName);
 
         channel.disconnect();
         sendClientStatus(channelName, nickname, ChatOperationProtos.ChatAction.ActionType.LEAVE);
+
+        if(chatInstances.isEmpty()) {
+            controlChannel.disconnect();
+            System.exit(0);
+        }
     }
 
     private void sendClientStatus(String channelName, String nickname, ChatOperationProtos.ChatAction.ActionType action) {
