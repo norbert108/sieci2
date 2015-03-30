@@ -86,7 +86,7 @@ public class ChannelListUI extends JFrame{
 
         loadChannelList();
 
-        this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setVisible(true);
         this.pack();
     }

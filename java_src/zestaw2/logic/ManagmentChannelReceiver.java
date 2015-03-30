@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.*;
 
+//TODO: remove empty channels from list
 public class ManagmentChannelReceiver extends ReceiverAdapter {
 
     ChatClient chatClient = null;
@@ -36,6 +37,7 @@ public class ManagmentChannelReceiver extends ReceiverAdapter {
         }
 
 
+
 //        nicknameMap.put(view.getSrc(), chatAction.getNickname());
 
 //        System.out.println(view.toString());
@@ -58,6 +60,9 @@ public class ManagmentChannelReceiver extends ReceiverAdapter {
 
                     chatState.put(channelName, membersList);
                 }
+            } else if (chatAction.getAction() == ChatOperationProtos.ChatAction.ActionType.LEAVE){
+                List<ChatOperationProtos.ChatAction> membersList = chatState.get(chatAction.getChannel());
+                membersList.remove(chatAction);
             }
         } catch (InvalidProtocolBufferException e) {
             e.printStackTrace();

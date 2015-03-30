@@ -110,15 +110,21 @@ public class ChatClient {
         JChannel channel = openChannel(channelName, channelName, new ChatChannelReceiver(this, channelName));
         openedChannels.put(channelName, channel);
 
-        // TODO: refactor
-        ChatClientUI chatClientUI = new ChatClientUI(this);
-        chatClientUI.setChannelName(channelName);
+        ChatClientUI chatClientUI = new ChatClientUI(this, channelName);
         chatInstances.put(channelName, chatClientUI);
 
         sendClientStatus(channelName, nickname, ChatOperationProtos.ChatAction.ActionType.JOIN);
     }
 
-    public void sendClientStatus(String channelName, String nickname, ChatOperationProtos.ChatAction.ActionType action) {
+    public void leaveChannel(String channelName){
+        Channel channel = openedChannels.get(channelName);
+        openedChannels.remove(channelName);
+
+        channel.disconnect();
+        sendClientStatus(channelName, nickname, ChatOperationProtos.ChatAction.ActionType.LEAVE);
+    }
+
+    private void sendClientStatus(String channelName, String nickname, ChatOperationProtos.ChatAction.ActionType action) {
         ChatOperationProtos.ChatAction chatAction = ChatOperationProtos.ChatAction.newBuilder()
                 .setChannel(channelName)
                 .setNickname(nickname)
@@ -144,7 +150,7 @@ public class ChatClient {
     }
 
     /**
-     * Send message to all channels clinet is connected to
+     * Send message to all specific channel
      */
     public void sendMessage(String channelName, String messageText) {
         JChannel channel = this.openedChannels.get(channelName);

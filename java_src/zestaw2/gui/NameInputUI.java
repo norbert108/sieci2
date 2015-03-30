@@ -22,7 +22,7 @@ public class NameInputUI extends JFrame {
         panel.add(okButton);
         this.add(panel);
 
-        this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setResizable(false);
         this.setLocationRelativeTo(null);
         this.setVisible(true);

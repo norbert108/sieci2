@@ -7,13 +7,11 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
+import java.awt.event.*;
 public class ChatClientUI extends JFrame {
 
     private ChatClient chatClient;
-    private String channelName = "not implemented yet";
+    private String channelName;
 
     private JTextPane chatWindow = new JTextPane();
 
@@ -22,9 +20,9 @@ public class ChatClientUI extends JFrame {
     private JTextField inputField = new JTextField();
     private JButton sendButton = new JButton("Send");
 
-    public ChatClientUI(ChatClient chatClient){
+    public ChatClientUI(ChatClient chatClient, String channelName){
         this.chatClient = chatClient;
-//        this.channelName = channelName;
+        this.channelName = channelName;
 
         this.setLayout(new BorderLayout());
 
@@ -56,15 +54,18 @@ public class ChatClientUI extends JFrame {
         bottomPanel.add(sendButton, BorderLayout.LINE_END);
         this.add(bottomPanel, BorderLayout.PAGE_END);
 
-        displayChatMessage("Connected to channel" + this.channelName + " as " + this.chatClient.getNickname());
+        displayChatMessage("Connected to channel " + this.channelName + " as " + this.chatClient.getNickname());
+
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                chatClient.leaveChannel(channelName);
+            }
+        });
 
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setVisible(true);
         this.pack();
-    }
-
-    public void setChannelName(String channelName){
-        this.channelName = channelName;
     }
 
     public void displayClientMessage(String nickname, String time, String message){
