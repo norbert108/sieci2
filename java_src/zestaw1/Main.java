@@ -1,4 +1,6 @@
-import sieci2.chat.MulticastChat;
+package zestaw1;
+
+import zestaw1.chat.MulticastChat;
 
 public class Main {
 

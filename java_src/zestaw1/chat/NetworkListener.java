@@ -1,4 +1,4 @@
-package sieci2.chat;
+package zestaw1.chat;
 
 import java.io.IOException;
 import java.net.DatagramPacket;

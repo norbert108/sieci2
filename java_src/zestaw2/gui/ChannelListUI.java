@@ -1,7 +1,7 @@
-package sieci2.jgroups.gui;
+package zestaw2.gui;
 
-import sieci2.jgroups.logic.ChatClient;
-import sieci2.jgroups.logic.ChatOperationProtos;
+import zestaw2.logic.ChatClient;
+import zestaw2.logic.ChatOperationProtos;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

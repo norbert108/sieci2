@@ -1,6 +1,6 @@
-package sieci2.jgroups;
+package zestaw2;
 
-import sieci2.jgroups.gui.NameInputUI;
+import zestaw2.gui.NameInputUI;
 
 public class ChatRunner
 {

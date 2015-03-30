@@ -1,6 +1,6 @@
-package sieci2.jgroups.gui;
+package zestaw2.gui;
 
-import sieci2.jgroups.logic.ChatClient;
+import zestaw2.logic.ChatClient;
 
 import javax.swing.*;
 import java.awt.*;

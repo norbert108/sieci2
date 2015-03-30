@@ -1,4 +1,4 @@
-package sieci2.jgroups.logic;
+package zestaw2.logic;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 import org.jgroups.Address;

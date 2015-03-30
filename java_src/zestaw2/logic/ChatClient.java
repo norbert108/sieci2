@@ -1,4 +1,4 @@
-package sieci2.jgroups.logic;
+package zestaw2.logic;
 
 import org.jgroups.JChannel;
 import org.jgroups.Message;
@@ -6,7 +6,7 @@ import org.jgroups.ReceiverAdapter;
 import org.jgroups.protocols.*;
 import org.jgroups.protocols.pbcast.*;
 import org.jgroups.stack.ProtocolStack;
-import sieci2.jgroups.gui.ChatClientUI;
+import zestaw2.gui.ChatClientUI;
 
 import java.net.InetAddress;
 import java.text.DateFormat;

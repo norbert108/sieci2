@@ -1,4 +1,4 @@
-package sieci2.chat;
+package zestaw1.chat;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
