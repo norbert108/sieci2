@@ -21,7 +21,8 @@ public class DataMonitor implements Watcher, StatCallback, ChildrenCallback {
 
     public DataMonitor(ZooKeeper zk, String znode, Watcher chainedWatcher, DataMonitorListener listener) {
         this.zooKeeper = zk;
-        this.zNode = znode;this.listener = listener;
+        this.zNode = znode;
+        this.listener = listener;
 
         zooKeeper.exists(znode, true, this, null); //check node status asynchronously
     }

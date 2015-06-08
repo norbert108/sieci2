@@ -7,7 +7,7 @@ import org.apache.zookeeper.*;
 
 public class Executor implements Watcher, Runnable, DataMonitorListener
 {
-    private final String znode = "znode_testowy";
+    private final String znode = "/znode_testowy";
 
     private DataMonitor dataMonitor;
     private ZooKeeper zooKeeper;
@@ -15,13 +15,10 @@ public class Executor implements Watcher, Runnable, DataMonitorListener
     private String command;
     private Process child;
 
-    public Executor(String hostPort, String command)
-            throws KeeperException, IOException {
-        String connectionString = hostPort; // TODO moze redundancja? wywalic po testach
-
+    public Executor(String hostPort, String command) throws KeeperException, IOException {
         this.command = command;
+        this.zooKeeper = new ZooKeeper(hostPort, 3000, this);
         this.dataMonitor = new DataMonitor(zooKeeper, znode, null, this);
-        this.zooKeeper = new ZooKeeper(connectionString, 3000, this);
 
         try {
             zooKeeper.exists(znode, true);   // first check TODO czeba?
