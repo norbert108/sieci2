@@ -22,7 +22,7 @@ public class Executor implements Watcher, Runnable, DataMonitorListener
 
         try {
             zooKeeper.exists(znode, true);   // first check TODO czeba?
-            System.out.println("xD");
+            System.out.println("It works!");
         } catch (Exception e){e.printStackTrace();}
     }
 
@@ -33,7 +33,7 @@ public class Executor implements Watcher, Runnable, DataMonitorListener
 
     public void run() {
         // scan input for commands
-        Scanner scanner = new Scanner(System.in); //TODO moze sie wyjebac xD
+        Scanner scanner = new Scanner(System.in); //TODO moze sie posypac
 
         while(dataMonitor.isAlive()){
             String cm = scanner.next();
@@ -56,6 +56,7 @@ public class Executor implements Watcher, Runnable, DataMonitorListener
     public void deleted() {
         // TODO: wypisac cos?
         //stop process
+        System.out.println("Oh my god, I'm dead! Why Lisa whyyyyyy?!!!111");
         child.destroy();
         child = null;
     }
