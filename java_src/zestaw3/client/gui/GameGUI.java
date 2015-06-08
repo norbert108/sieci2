@@ -1,6 +1,6 @@
-package zestaw3.gui;
+package zestaw3.client.gui;
 
-import zestaw3.logic.UserGameBoard;
+import zestaw3.client.logic.UserGameBoard;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,7 +25,7 @@ public class GameGUI extends JFrame {
 
         playerPanel.add(topPanel, BorderLayout.PAGE_START);
 
-        UserGameBoard playerBoard = new UserGameBoard(10, 5);
+        UserGameBoard playerBoard = new UserGameBoard(10, 5, "xD");
         playerPanel.add(playerBoard, BorderLayout.CENTER);
 
         doneButton.addActionListener(
@@ -40,10 +40,15 @@ public class GameGUI extends JFrame {
 
         //create right panel
         JPanel opponentPanel = new JPanel();
-        IGameBoard opponentBoard = new IGameBoard(10) {
+        GameBoard opponentBoard = new GameBoard(10, "XDDDD") {
             @Override
             public void movePlayed(int x, int y) {
                 System.out.println("row " + x + "col " + y);
+            }
+
+            @Override
+        public String getNick() {
+                return "xD";
             }
         };
         opponentPanel.add(opponentBoard);

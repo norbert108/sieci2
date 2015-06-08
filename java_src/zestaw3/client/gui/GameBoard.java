@@ -1,4 +1,4 @@
-package zestaw3.gui;
+package zestaw3.client.gui;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -11,7 +11,7 @@ import java.awt.event.MouseEvent;
 // TODO: cell colors
 // TODO: square cells
 
-public abstract class IGameBoard extends JPanel{
+public abstract class GameBoard extends JPanel{
     protected String nick;
     private JTable board;
     protected DefaultTableModel boardTableModel;
@@ -19,7 +19,7 @@ public abstract class IGameBoard extends JPanel{
     public abstract void movePlayed(int x, int y);
     public abstract String getNick();
 
-    public IGameBoard(Integer boardSize, String nick){
+    public GameBoard(Integer boardSize, String nick){
         this.nick = nick;
 
         this.setLayout(new FlowLayout());

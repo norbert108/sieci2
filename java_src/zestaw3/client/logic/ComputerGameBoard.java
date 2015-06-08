@@ -1,8 +1,8 @@
-package zestaw3.logic;
+package zestaw3.client.logic;
 
-import zestaw3.gui.IGameBoard;
+import zestaw3.client.gui.GameBoard;
 
-public class ComputerGameBoard extends IGameBoard {
+public class ComputerGameBoard extends GameBoard {
 
     private String playerName;
 
@@ -20,7 +20,7 @@ public class ComputerGameBoard extends IGameBoard {
      */
     @Override
     public void movePlayed(int x, int y) {
-        
+
     }
 
     @Override

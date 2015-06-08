@@ -1,8 +1,8 @@
-package zestaw3.logic;
+package zestaw3.client.logic;
 
-import zestaw3.gui.IGameBoard;
+import zestaw3.client.gui.GameBoard;
 
-public class UserGameBoard extends IGameBoard {
+public class UserGameBoard extends GameBoard {
 
     private int shipCount = 0;
     private int maxShips;
