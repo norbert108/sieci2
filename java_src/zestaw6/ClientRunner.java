@@ -12,11 +12,11 @@ public class ClientRunner {
             System.err.println("Usage: client program_name host:port");
             System.exit(2);
         }
-        String filename = args[0];
+        String command = args[0];
         String host = args[1];
 
         try {
-            new Executor(host, filename).run();
+            new Executor(host, command).run();
         } catch (IOException | KeeperException e) {
             e.printStackTrace();
         }
