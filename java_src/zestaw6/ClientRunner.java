@@ -1,7 +1,6 @@
 package zestaw6;
 
 import org.apache.zookeeper.KeeperException;
-
 import java.io.IOException;
 
 public class ClientRunner {

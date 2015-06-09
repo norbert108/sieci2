@@ -3,10 +3,13 @@ package zestaw6;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.zookeeper.*;
 import org.apache.zookeeper.AsyncCallback.StatCallback;
 import org.apache.zookeeper.AsyncCallback.ChildrenCallback;
+import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.KeeperException.Code;
+import org.apache.zookeeper.WatchedEvent;
+import org.apache.zookeeper.Watcher;
+import org.apache.zookeeper.ZooKeeper;
 import org.apache.zookeeper.data.Stat;
 
 public class DataMonitor implements Watcher, StatCallback, ChildrenCallback {
@@ -19,8 +22,8 @@ public class DataMonitor implements Watcher, StatCallback, ChildrenCallback {
 
     boolean dead;
 
-    public DataMonitor(ZooKeeper zk, String znode, Watcher chainedWatcher, DataMonitorListener listener) {
-        this.zooKeeper = zk;
+    public DataMonitor(ZooKeeper zooKeeper, String znode, Watcher chainedWatcher, DataMonitorListener listener) {
+        this.zooKeeper = zooKeeper;
         this.zNode = znode;
         this.listener = listener;
 
@@ -111,7 +114,6 @@ public class DataMonitor implements Watcher, StatCallback, ChildrenCallback {
         childrenNumber = updatedChildrenNumber;
     }
 
-    // TODO testowac miliard razy xD
     private int countChildren(String path){
         int childrenNumber = 0;
 
@@ -126,7 +128,7 @@ public class DataMonitor implements Watcher, StatCallback, ChildrenCallback {
         } catch (KeeperException | InterruptedException e) {
             e.printStackTrace();
 
-            return 0; //TODO LOL
+            return 0;
         }
     }
 

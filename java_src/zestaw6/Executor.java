@@ -19,21 +19,16 @@ public class Executor implements Watcher, Runnable, DataMonitorListener
         this.command = command;
         this.zooKeeper = new ZooKeeper(hostPort, 3000, this);
         this.dataMonitor = new DataMonitor(zooKeeper, znode, null, this);
-
-        try {
-            zooKeeper.exists(znode, true);   // first check TODO czeba?
-            System.out.println("xD");
-        } catch (Exception e){e.printStackTrace();}
     }
 
-    /* delegate data listener events to data monitor */ // TODO lol
+    /* delegate data listener events to data monitor */
     public void process(WatchedEvent event) {
         dataMonitor.process(event);
     }
 
     public void run() {
         // scan input for commands
-        Scanner scanner = new Scanner(System.in); //TODO moze sie wyjebac xD
+        Scanner scanner = new Scanner(System.in);
 
         while(dataMonitor.isAlive()){
             String cm = scanner.next();
@@ -54,14 +49,13 @@ public class Executor implements Watcher, Runnable, DataMonitorListener
     }
 
     public void deleted() {
-        // TODO: wypisac cos?
         //stop process
         child.destroy();
         child = null;
     }
 
     public void childrenChanged(int children) {
-        System.out.println("Number of children has changed, currently " + children); //TODO zmodyfikowac zeby wypisywa³o tylko jak wzrosnie liczba childrenow
+        System.out.println("Number of children has changed, currently " + children);
     }
 
     public void closing(int rc) {
